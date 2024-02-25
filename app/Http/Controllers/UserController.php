@@ -18,8 +18,16 @@ class UserController extends Controller
     {
         $filter = new UserFilter();
         $queryItems = $filter->transform($request);
-        $users = User::where($queryItems)->get();
-        return new UserCollection($users->all());
+
+
+        $users = User::where($queryItems);
+        $includeUsers = $request->query("includeUsers");
+        if (count($queryItems) == 0) {
+            return new UserCollection(User::paginate());
+        } else {
+            $users = User::where($queryItems)->paginate();
+            return new UserCollection($users->appends($request->query()));
+        }
     }
 
     /**

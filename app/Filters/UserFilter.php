@@ -20,6 +20,7 @@ class UserFilter extends ApiFilter
         'lt' => '<',
         'lte' => '<=',
         'gt' => '>',
-        'gte' => '>='
+        'gte' => '>=',
+        'ne' => '!=',
     ];
 }

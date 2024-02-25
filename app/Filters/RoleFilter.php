@@ -17,6 +17,7 @@ class RoleFilter extends ApiFilter
         'lt' => '<',
         'lte' => '<=',
         'gt' => '>',
-        'gte' => '>='
+        'gte' => '>=',
+        'ne' => '!=',
     ];
 }

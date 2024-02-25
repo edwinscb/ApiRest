@@ -18,9 +18,17 @@ class RoleController extends Controller
     {
         $filter = new RoleFilter();
         $queryItems = $filter->transform($request);
-        $roles = Role::where($queryItems)->get();
-        return new RoleCollection($roles->all());
+
+        // Utiliza el método with() en la consulta para cargar la relación 'users'
+        $roles = Role::where($queryItems);
+        $includeUsers = $request->query("includeUsers");
+        if ($includeUsers) {
+            $users = $roles->with('users');
+        }
+
+        return new RoleCollection($roles->paginate()->appends($request->query()));
     }
+
 
     /**
      * Show the form for creating a new resource.
