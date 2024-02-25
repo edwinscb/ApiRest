@@ -18,7 +18,7 @@ return new class extends Migration
             $table->timestamp('email_verified_at')->nullable(); #IDK
             $table->string('password');
             $table->rememberToken(); #IDK
-            $table->timestamps(); #IDK
+            $table->timestamps();
             $table->integer('role_id');
         });
     }

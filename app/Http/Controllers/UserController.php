@@ -6,16 +6,20 @@ use App\Models\User;
 use App\Http\Requests\StoreUserRequest;
 use App\Http\Requests\UpdateUserRequest;
 use App\Http\Resources\UserCollection;
+use Illuminate\Http\Request;
+use App\Filters\UserFilter;
 
 class UserController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $users = User::all();
-        return new UserCollection($users);
+        $filter = new UserFilter();
+        $queryItems = $filter->transform($request);
+        $users = User::where($queryItems)->get();
+        return new UserCollection($users->all());
     }
 
     /**

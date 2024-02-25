@@ -6,16 +6,20 @@ use App\Http\Resources\RoleCollection;
 use App\Models\Role;
 use App\Http\Requests\StoreRoleRequest;
 use App\Http\Requests\UpdateRoleRequest;
+use App\Filters\RoleFilter;
+use Illuminate\Http\Request;
 
 class RoleController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $roles = Role::all();
-        return new RoleCollection($roles);
+        $filter = new RoleFilter();
+        $queryItems = $filter->transform($request);
+        $roles = Role::where($queryItems)->get();
+        return new RoleCollection($roles->all());
     }
 
     /**
