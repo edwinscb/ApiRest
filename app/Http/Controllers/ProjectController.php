@@ -6,14 +6,30 @@ use App\Models\Project;
 use App\Http\Requests\StoreProjectRequest;
 use App\Http\Requests\UpdateProjectRequest;
 
+use App\Http\Resources\ProjectCollection;
+use App\Http\Resources\ProjectResource;
+use Illuminate\Http\Request;
+use App\Filters\ProjectFilter;
+
 class ProjectController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        //
+        $filter = new ProjectFilter();
+        $queryItems = $filter->transform($request);
+
+
+        $projects = Project::where($queryItems);
+        $includeProjects = $request->query("includeProjects");
+        if (count($queryItems) == 0) {
+            return new ProjectCollection(Project::paginate());
+        } else {
+            $projects = Project::where($queryItems)->paginate();
+            return new ProjectCollection($projects->appends($request->query()));
+        }
     }
 
     /**
@@ -37,7 +53,7 @@ class ProjectController extends Controller
      */
     public function show(Project $project)
     {
-        //
+        return new ProjectResource($project);
     }
 
     /**

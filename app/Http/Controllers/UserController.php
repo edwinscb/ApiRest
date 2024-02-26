@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use App\Http\Requests\StoreUserRequest;
 use App\Http\Requests\UpdateUserRequest;
+
 use App\Http\Resources\UserCollection;
 use App\Http\Resources\UserResource;
 use Illuminate\Http\Request;
@@ -19,16 +20,12 @@ class UserController extends Controller
     {
         $filter = new UserFilter();
         $queryItems = $filter->transform($request);
-
-
         $users = User::where($queryItems);
-        $includeUsers = $request->query("includeUsers");
-        if (count($queryItems) == 0) {
-            return new UserCollection(User::paginate());
-        } else {
-            $users = User::where($queryItems)->paginate();
-            return new UserCollection($users->appends($request->query()));
+        $includeProjects = $request->query("includeCreatedProjects");
+        if ($includeProjects) {
+            $projects = $users->with("projects");
         }
+        return new UserCollection($users->paginate()->appends($request->query()));
     }
 
     /**
@@ -52,6 +49,10 @@ class UserController extends Controller
      */
     public function show(User $user)
     {
+        $includeProjects = request()->query('includeCreatedProjects');
+        if ($includeProjects) {
+            return new UserResource($user->loadMissing('projects'));
+        }
         return new UserResource($user);
     }
 

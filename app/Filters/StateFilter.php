@@ -3,24 +3,21 @@
 namespace App\Filters;
 
 use App\Filters\ApiFilter;
+use Illuminate\Http\Request;
 
-class UserFilter extends ApiFilter
+class StateFilter extends ApiFilter
 {
 
     protected $safeParams = [
-        'name' => ['eq'],
-        'email' => ['eq'],
-        'roleId' => ['eq', 'lt', 'lte', 'gt', 'gte', 'ne']
+        'name' => ['eq']
     ];
-    protected $columnMap = [
-        'roleId' => 'role_id'
-    ];
+    protected $columnMap = [];
     protected $operatorMap = [
         'eq' => '=',
         'lt' => '<',
         'lte' => '<=',
         'gt' => '>',
         'gte' => '>=',
-        'ne' => '!='
+        'ne' => '!=',
     ];
 }

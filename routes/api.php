@@ -1,6 +1,8 @@
 <?php
 
+use App\Http\Controllers\ProjectController;
 use App\Http\Controllers\RoleController;
+use App\Http\Controllers\StateController;
 use App\Http\Controllers\UserController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -23,4 +25,6 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 Route::group(['prefix' => 'v1', 'namespace' => 'App\Http\Controllers'], function () {
     Route::apiResource('roles', RoleController::class);
     Route::apiResource('users', UserController::class);
+    Route::apiResource('states', StateController::class);
+    Route::apiResource('projects', ProjectController::class);
 });
