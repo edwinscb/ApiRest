@@ -3,11 +3,13 @@
 namespace App\Http\Controllers;
 
 use App\Http\Resources\RoleCollection;
+use App\Http\Resources\RoleResource;
 use App\Models\Role;
 use App\Http\Requests\StoreRoleRequest;
 use App\Http\Requests\UpdateRoleRequest;
 use App\Filters\RoleFilter;
 use Illuminate\Http\Request;
+
 
 class RoleController extends Controller
 {
@@ -51,7 +53,11 @@ class RoleController extends Controller
      */
     public function show(Role $role)
     {
-        //
+        $includeUsers = request()->query('includeUsers');
+        if ($includeUsers) {
+            return new RoleResource($role->loadMissing('users'));
+        }
+        return new RoleResource($role);
     }
 
     /**
