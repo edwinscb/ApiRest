@@ -13,6 +13,12 @@ return new class extends Migration
     {
         Schema::create('user_histories', function (Blueprint $table) {
             $table->id();
+            $table->string('name');
+            $table->text('description');
+            $table->text('criteria');
+            $table->integer('state_id');
+            $table->integer('project_id');
+            $table->integer('created_by_id');
             $table->timestamps();
         });
     }

@@ -6,14 +6,30 @@ use App\Models\ProjectAssignment;
 use App\Http\Requests\StoreProjectAssignmentRequest;
 use App\Http\Requests\UpdateProjectAssignmentRequest;
 
+use App\Http\Resources\ProjectAssignmentCollection;
+use App\Http\Resources\ProjectAssignmentResource;
+use Illuminate\Http\Request;
+use App\Filters\ProjectAssignmentFilter;
+
+
 class ProjectAssignmentController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        //
+        $filter = new ProjectAssignmentFilter();
+        $queryItems = $filter->transform($request);
+
+        $projectAssignments = ProjectAssignment::where($queryItems);
+        $includeprojectAssignments = $request->query("includeprojectAssignments");
+        if (count($queryItems) == 0) {
+            return new ProjectAssignmentCollection(ProjectAssignment::paginate());
+        } else {
+            $projectAssignments = ProjectAssignment::where($queryItems)->paginate();
+            return new ProjectAssignmentCollection($projectAssignments->appends($request->query()));
+        }
     }
 
     /**
@@ -37,7 +53,7 @@ class ProjectAssignmentController extends Controller
      */
     public function show(ProjectAssignment $projectAssignment)
     {
-        //
+        return new ProjectAssignmentResource($projectAssignment);
     }
 
     /**

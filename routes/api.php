@@ -1,9 +1,12 @@
 <?php
 
+use App\Http\Controllers\ProjectAssignmentController;
 use App\Http\Controllers\ProjectController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\StateController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\UserHistoryController;
+use App\Models\UserHistory;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -27,4 +30,6 @@ Route::group(['prefix' => 'v1', 'namespace' => 'App\Http\Controllers'], function
     Route::apiResource('users', UserController::class);
     Route::apiResource('states', StateController::class);
     Route::apiResource('projects', ProjectController::class);
+    Route::apiResource('projectAssignments', ProjectAssignmentController::class);
+    Route::apiResource('userHistories', UserHistoryController::class);
 });

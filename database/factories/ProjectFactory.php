@@ -4,6 +4,7 @@ namespace Database\Factories;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
 use App\Models\User;
+use App\Models\State;
 
 /**
  * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Project>
@@ -18,6 +19,7 @@ class ProjectFactory extends Factory
     public function definition(): array
     {
         $adminUsers = User::where('role_id', 1)->get();
+        $state = State::inRandomOrder()->first()->id;
         if ($adminUsers->isNotEmpty()) {
             $adminUser = $adminUsers->random();
         }
@@ -25,8 +27,8 @@ class ProjectFactory extends Factory
             'name' => fake()->unique()->sentence(),
             'description' => fake()->paragraph(),
             'started_project' => fake()->date(),
-            'state_id' => fake()->numberBetween(1, 3),
-            'Created_by_id' => $adminUser->id,
+            'state_id' => $state,
+            'Created_by_id' => $adminUser->id
         ];
     }
 }

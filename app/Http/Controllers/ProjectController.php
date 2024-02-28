@@ -20,16 +20,12 @@ class ProjectController extends Controller
     {
         $filter = new ProjectFilter();
         $queryItems = $filter->transform($request);
-
-
         $projects = Project::where($queryItems);
-        $includeProjects = $request->query("includeProjects");
-        if (count($queryItems) == 0) {
-            return new ProjectCollection(Project::paginate());
-        } else {
-            $projects = Project::where($queryItems)->paginate();
-            return new ProjectCollection($projects->appends($request->query()));
+        $includeUserHistories = $request->query("includeUserHistories");
+        if ($includeUserHistories) {
+            $UserHistories = $projects->with("userHistories");
         }
+        return new ProjectCollection($projects->paginate()->appends($request->query()));
     }
 
     /**
@@ -53,6 +49,10 @@ class ProjectController extends Controller
      */
     public function show(Project $project)
     {
+        $includeUserHistories = request()->query('includeUserHistories');
+        if ($includeUserHistories) {
+            return new ProjectResource($project->loadMissing('userHistories'));
+        }
         return new ProjectResource($project);
     }
 

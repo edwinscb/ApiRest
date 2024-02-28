@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources;
 
+use App\Models\UserHistory;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -20,7 +21,9 @@ class ProjectResource extends JsonResource
             "description" => $this->description,
             "startedProject" => $this->started_project,
             "stateId" => $this->state_id,
-            "createdById" => $this->created_by_id
+            "createdById" => $this->created_by_id,
+            "AssignedUserHistories" => UserHistoryResource::collection($this->whenLoaded("userHistories")),
+
         ];
     }
 }

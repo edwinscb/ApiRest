@@ -29,4 +29,14 @@ class Project extends Model
     {
         return $this->belongsTo(State::class);
     }
+
+    /**
+     * Get all of the userHistories for the Project
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function userHistories()
+    {
+        return $this->hasMany(UserHistory::class);
+    }
 }
