@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class ProjectAssignment extends Model
 {
     use HasFactory;
-
+    protected $fillable = [];
     /**
      * Get the user that owns the ProjectAssignment
      *

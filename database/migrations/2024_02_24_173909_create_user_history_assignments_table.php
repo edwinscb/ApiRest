@@ -13,6 +13,8 @@ return new class extends Migration
     {
         Schema::create('user_history_assignments', function (Blueprint $table) {
             $table->id();
+            $table->integer('user_history_id');
+            $table->integer('user_id');
             $table->timestamps();
         });
     }
