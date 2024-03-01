@@ -16,9 +16,12 @@ return new class extends Migration
             $table->string('name');
             $table->text('description');
             $table->date('started_project');
-            $table->integer('state_id');
-            $table->integer('created_by_id');
+            $table->unsignedBigInteger('state_id');
+            $table->unsignedBigInteger('created_by_id');
             $table->timestamps();
+
+            $table->foreign('state_id')->references('id')->on('states');
+            $table->foreign('created_by_id')->references('id')->on('users');
         });
     }
 

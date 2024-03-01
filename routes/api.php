@@ -8,6 +8,7 @@ use App\Http\Controllers\RoleController;
 use App\Http\Controllers\StateController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\UserHistoryController;
+use App\Http\Controllers\TaskController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -34,4 +35,5 @@ Route::group(['prefix' => 'v1', 'namespace' => 'App\Http\Controllers'], function
     Route::apiResource('projectAssignments', ProjectAssignmentController::class);
     Route::apiResource('userHistories', UserHistoryController::class);
     Route::apiResource('userHistoryAssignments', UserHistoryAssignmentController::class);
+    Route::apiResource('tasks', TaskController::class);
 });
