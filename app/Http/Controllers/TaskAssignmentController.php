@@ -6,14 +6,29 @@ use App\Models\TaskAssignment;
 use App\Http\Requests\StoreTaskAssignmentRequest;
 use App\Http\Requests\UpdateTaskAssignmentRequest;
 
+use App\Http\Resources\TaskAssignmentCollection;
+use App\Http\Resources\TaskAssignmentResource;
+use Illuminate\Http\Request;
+use App\Filters\TaskFilter;
+
 class TaskAssignmentController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        //
+        $filter = new TaskFilter();
+        $queryItems = $filter->transform($request);
+
+        $taskAssignments = TaskAssignment::where($queryItems);
+        $includeTaskAssignments = $request->query("includeTaskAssignments");
+        if (count($queryItems) == 0) {
+            return new TaskAssignmentCollection(TaskAssignment::paginate());
+        } else {
+            $taskAssignments = TaskAssignment::where($queryItems)->paginate();
+            return new TaskAssignmentCollection($taskAssignments->appends($request->query()));
+        }
     }
 
     /**
@@ -37,7 +52,7 @@ class TaskAssignmentController extends Controller
      */
     public function show(TaskAssignment $taskAssignment)
     {
-        //
+        return new TaskAssignmentResource($taskAssignment);
     }
 
     /**

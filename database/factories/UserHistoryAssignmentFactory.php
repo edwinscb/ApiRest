@@ -2,7 +2,7 @@
 
 namespace Database\Factories;
 
-use App\Models\User;
+
 use App\Models\UserHistory;
 use App\Models\Project;
 use App\Models\ProjectAssignment;
