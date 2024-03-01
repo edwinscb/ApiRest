@@ -39,4 +39,13 @@ class UserHistory extends Model
     {
         return $this->belongsTo(Project::class);
     }
+    /**
+     * Get all of the tasks for the UserHistory
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function tasks()
+    {
+        return $this->hasMany(Task::class);
+    }
 }

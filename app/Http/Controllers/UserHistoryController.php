@@ -10,6 +10,7 @@ use App\Http\Resources\UserHistoryCollection;
 use App\Http\Resources\UserHistoryResource;
 use Illuminate\Http\Request;
 use App\Filters\UserHistoryFilter;
+use App\Http\Resources\TaskResource;
 
 class UserHistoryController extends Controller
 {
@@ -20,15 +21,12 @@ class UserHistoryController extends Controller
     {
         $filter = new UserHistoryFilter();
         $queryItems = $filter->transform($request);
-
-        $UserHistories = UserHistory::where($queryItems);
-        $includeUserHistories = $request->query("includeUserHistories");
-        if (count($queryItems) == 0) {
-            return new UserHistoryCollection(UserHistory::paginate());
-        } else {
-            $UserHistories = UserHistory::where($queryItems)->paginate();
-            return new UserHistoryCollection($UserHistories->appends($request->query()));
+        $userHistories = UserHistory::where($queryItems);
+        $includeTasks = $request->query("includeTasks");
+        if ($includeTasks) {
+            $Tasks = $userHistories->with("tasks");
         }
+        return new UserHistoryCollection($userHistories->paginate()->appends($request->query()));
     }
 
     /**
@@ -52,6 +50,10 @@ class UserHistoryController extends Controller
      */
     public function show(UserHistory $userHistory)
     {
+        $includeTasks = request()->query('includeTasks');
+        if ($includeTasks) {
+            return new UserHistoryResource($userHistory->loadMissing('tasks'));
+        }
         return new UserHistoryResource($userHistory);
     }
 

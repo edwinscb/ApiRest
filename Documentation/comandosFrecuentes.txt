@@ -1,0 +1,4 @@
+#iniciar proyecto
+    php artisan serve 
+#Crear estructura de base de datos e insertar valores a las tablas con los factories.
+    php artisan migrate:fresh --seed

@@ -6,14 +6,29 @@ use App\Models\Task;
 use App\Http\Requests\StoreTaskRequest;
 use App\Http\Requests\UpdateTaskRequest;
 
+use App\Http\Resources\TaskCollection;
+use App\Http\Resources\TaskResource;
+use Illuminate\Http\Request;
+use App\Filters\TaskFilter;
+
 class TaskController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        //
+        $filter = new TaskFilter();
+        $queryItems = $filter->transform($request);
+
+        $Tasks = Task::where($queryItems);
+        $includeTasks = $request->query("includeTasks");
+        if (count($queryItems) == 0) {
+            return new TaskCollection(Task::paginate());
+        } else {
+            $Tasks = Task::where($queryItems)->paginate();
+            return new TaskCollection($Tasks->appends($request->query()));
+        }
     }
 
     /**
@@ -37,7 +52,7 @@ class TaskController extends Controller
      */
     public function show(Task $task)
     {
-        //
+        return new TaskResource($task);
     }
 
     /**
